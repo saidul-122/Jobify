@@ -3,7 +3,6 @@ import User from '../models/UserModel.js';
 import { comparePassword, hashPassword } from '../utils/passwordUtils.js';
 import { UnauthenticatedError } from '../errors/customErrors.js';
 import { createJWT } from '../utils/tokenUtils.js';
-
 export const register = async (req, res) => {
   const isFirstAccount = (await User.countDocuments()) === 0;
   req.body.role = isFirstAccount ? 'admin' : 'user';
@@ -28,7 +27,7 @@ export const login = async (req, res) => {
 
   res.cookie('token', token, {
     httpOnly: true,
-    expires: new Date(Date.now() + oneDay),
+    expiresIn: "2 days",
     secure: process.env.NODE_ENV === 'production',
   });
   res.status(StatusCodes.OK).json({ msg: 'user logged in' });
